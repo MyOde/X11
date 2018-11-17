@@ -17,7 +17,7 @@
 module Graphics.X11.Xlib.Types(
         Display(..), Screen(..), Visual(..), GC(..), GCValues, SetWindowAttributes,
         VisualInfo(..),
-        Image(..), Point(..), Rectangle(..), Arc(..), Segment(..), Color(..),
+        Image(..), Point(..), Rectangle(..), Arc(..), Segment(..), Color(..), MyImage(..),
         Pixel, Position, Dimension, Angle, ScreenNumber, Buffer
         ) where
 
@@ -166,8 +166,68 @@ instance Storable VisualInfo where
                 where
                         ~(Visual visualPtr) = visualInfo_visual info
 
+newtype XPointer = XPointer (Ptr CChar)
+
+-- TODO Maybe might really need the funcs structure defined for it
+data MyImage = MyImage { ximage_width :: CInt
+                       , ximage_height :: CInt
+                       , ximage_xoffset :: CInt
+                       , ximage_format :: CInt
+                       , ximage_data :: Ptr CChar
+                       , ximage_byteOrder :: CInt
+                       , ximage_bitmapUnit :: CInt
+                       , ximage_bitmapBitOrder :: CInt
+                       , ximage_bitmapPad :: CInt
+                       , ximage_depth :: CInt
+                       , ximage_bytesPerLine :: CInt
+                       , ximage_bitsPerPixel :: CInt
+                       , ximage_redMask :: CULong
+                       , ximage_greenMask :: CULong
+                       , ximage_blueMask :: CULong
+                       , ximage_obdata :: XPointer
+                       }
+
+instance Storable MyImage where
+  sizeOf _ = #size XImage
+  alignment _ = alignment (undefined::CInt)
+  peek p = do
+    width <- #{peek XImage, width} p
+    height <- #{peek XImage, height} p
+    xoffset <- #{peek XImage, xoffset} p
+    format <- #{peek XImage, format} p
+    dataPtr <- #{peek XImage, data} p
+    byteOrder <- #{peek XImage, byte_order} p
+    bitmapUnit <- #{peek XImage, bitmap_unit} p
+    bitmapBitOrder<- #{peek XImage, bitmap_bit_order} p
+    bitmapPad <- #{peek XImage, bitmap_pad} p
+    depth <- #{peek XImage, depth} p
+    bytesPerLine <- #{peek XImage, bytes_per_line} p
+    bitsPerPixel <- #{peek XImage, bits_per_pixel} p
+    redMask <- #{peek XImage, red_mask} p
+    greenMask <- #{peek XImage, green_mask} p
+    blueMask <- #{peek XImage, blue_mask} p
+    obdata <- #{peek XImage, obdata} p
+    return $ MyImage width height xoffset format dataPtr byteOrder bitmapUnit bitmapBitOrder bitmapPad depth bytesPerLine bitsPerPixel redMask greenMask blueMask obdata
+  poke p info = do
+    #{poke XImage, width} p $ ximage_width info
+    #{poke XImage, height} p $ ximage_height info
+    #{poke XImage, xoffset} p $ ximage_xoffset info
+    #{poke XImage, format} p $ ximage_format info
+    #{poke XImage, data} p $ ximage_data info
+    #{poke XImage, byte_order} p $ ximage_byteOrder info
+    #{poke XImage, bitmap_unit} p $ ximage_bitmapUnit info
+    #{poke XImage, bitmap_bit_order} p $ ximage_bitmapBitOrder info
+    #{poke XImage, bitmap_pad} p $ ximage_bitmapPad info
+    #{poke XImage, depth} p $ ximage_depth info
+    #{poke XImage, bytes_per_line} p $ ximage_bytesPerLine info
+    #{poke XImage, bits_per_pixel} p $ ximage_bitsPexPixel info
+    #{poke XImage, red_mask} p $ ximage_redMask info
+    #{poke XImage, green_mask} p $ ximage_greenMask info
+    #{poke XImage, blue_mask} p $ ximage_blueMask info
+    #{poke XImage, obdata} p $ ximage_obdata info
+
 -- | pointer to an X11 @XImage@ structure
-newtype Image    = Image    (Ptr Image)
+newtype Image    = Image    (Ptr MyImage)
 #if __GLASGOW_HASKELL__
         deriving (Eq, Ord, Show, Typeable, Data)
 #else
