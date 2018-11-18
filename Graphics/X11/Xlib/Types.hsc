@@ -229,7 +229,7 @@ instance Storable MyImage where
 -- | pointer to an X11 @XImage@ structure
 newtype Image    = Image    (Ptr MyImage)
 #if __GLASGOW_HASKELL__
-        deriving (Eq, Ord, Show, Typeable, Data)
+        deriving (Eq, Ord, Show, Typeable)
 #else
         deriving (Eq, Ord, Show)
 #endif
