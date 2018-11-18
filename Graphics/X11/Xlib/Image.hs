@@ -41,7 +41,7 @@ createImage display vis depth format offset dat width height bitmap_pad bytes_pe
     return (Image image)
 foreign import ccall unsafe "HsXlib.h XCreateImage"
     xCreateImage :: Display -> Visual -> CInt -> ImageFormat -> CInt ->
-        Ptr CChar -> Dimension -> Dimension -> CInt -> CInt -> IO (Ptr Image)
+        Ptr CChar -> Dimension -> Dimension -> CInt -> CInt -> IO (Ptr MyImage)
 
 -- | interface to the X11 library function @XPutImage()@.
 foreign import ccall unsafe "HsXlib.h XPutImage"
@@ -59,7 +59,7 @@ getImage display d x y width height plane_mask format = do
     return (Image image)
 
 foreign import ccall unsafe "HsXlib.h XGetImage"
-    xGetImage :: Display -> Drawable -> CInt -> CInt -> CUInt -> CUInt -> CULong -> ImageFormat -> IO (Ptr Image)
+    xGetImage :: Display -> Drawable -> CInt -> CInt -> CUInt -> CUInt -> CULong -> ImageFormat -> IO (Ptr MyImage)
 
 foreign import ccall unsafe "HsXlib.h XGetPixel"
     xGetPixel :: Image -> CInt -> CInt -> IO CULong
