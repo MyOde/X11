@@ -166,7 +166,7 @@ instance Storable VisualInfo where
                 where
                         ~(Visual visualPtr) = visualInfo_visual info
 
-newtype XPointer = XPointer (Ptr CChar)
+type XPointer = Ptr CChar
 
 -- TODO Maybe might really need the funcs structure defined for it
 data MyImage = MyImage { ximage_width :: CInt
