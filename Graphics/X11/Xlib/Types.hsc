@@ -220,7 +220,7 @@ instance Storable MyImage where
     #{poke XImage, bitmap_pad} p $ ximage_bitmapPad info
     #{poke XImage, depth} p $ ximage_depth info
     #{poke XImage, bytes_per_line} p $ ximage_bytesPerLine info
-    #{poke XImage, bits_per_pixel} p $ ximage_bitsPexPixel info
+    #{poke XImage, bits_per_pixel} p $ ximage_bitsPerPixel info
     #{poke XImage, red_mask} p $ ximage_redMask info
     #{poke XImage, green_mask} p $ ximage_greenMask info
     #{poke XImage, blue_mask} p $ ximage_blueMask info
