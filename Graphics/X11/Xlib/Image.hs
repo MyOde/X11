@@ -22,13 +22,13 @@ module Graphics.X11.Xlib.Image(
         getPixel
         ) where
 
-import Graphics.X11.Types
-import Graphics.X11.Xlib.Types
+import           Graphics.X11.Types
+import           Graphics.X11.Xlib.Types
 
-import Foreign (Ptr, throwIfNull)
-import Foreign.C.Types
+import           Foreign                 (Ptr, throwIfNull)
+import           Foreign.C.Types
 
-import System.IO.Unsafe (unsafePerformIO)
+import           System.IO.Unsafe        (unsafePerformIO)
 
 ----------------------------------------------------------------
 -- Image
@@ -37,8 +37,7 @@ import System.IO.Unsafe (unsafePerformIO)
 -- | interface to the X11 library function @XCreateImage()@.
 createImage :: Display -> Visual -> CInt -> ImageFormat -> CInt -> Ptr CChar -> Dimension -> Dimension -> CInt -> CInt -> IO Image
 createImage display vis depth format offset dat width height bitmap_pad bytes_per_line = do
-    image <- throwIfNull "createImage" (xCreateImage display vis depth format offset dat width height bitmap_pad bytes_per_line)
-    return (Image image)
+    throwIfNull "createImage" (xCreateImage display vis depth format offset dat width height bitmap_pad bytes_per_line)
 foreign import ccall unsafe "HsXlib.h XCreateImage"
     xCreateImage :: Display -> Visual -> CInt -> ImageFormat -> CInt ->
         Ptr CChar -> Dimension -> Dimension -> CInt -> CInt -> IO (Ptr MyImage)
@@ -55,8 +54,7 @@ foreign import ccall unsafe "HsXlib.h XDestroyImage"
 -- | interface to the X11 library function @XGetImage()@.
 getImage :: Display -> Drawable -> CInt -> CInt -> CUInt -> CUInt -> CULong -> ImageFormat -> IO Image
 getImage display d x y width height plane_mask format = do
-    image <- throwIfNull "getImage" (xGetImage display d x y width height plane_mask format)
-    return (Image image)
+    throwIfNull "getImage" (xGetImage display d x y width height plane_mask format)
 
 foreign import ccall unsafe "HsXlib.h XGetImage"
     xGetImage :: Display -> Drawable -> CInt -> CInt -> CUInt -> CUInt -> CULong -> ImageFormat -> IO (Ptr MyImage)

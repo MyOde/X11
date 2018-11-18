@@ -227,12 +227,13 @@ instance Storable MyImage where
     #{poke XImage, obdata} p $ ximage_obdata info
 
 -- | pointer to an X11 @XImage@ structure
-newtype Image    = Image    (Ptr MyImage)
-#if __GLASGOW_HASKELL__
-        deriving (Eq, Ord, Show, Typeable)
-#else
-        deriving (Eq, Ord, Show)
-#endif
+-- newtype Image    = Image    (Ptr MyImage)
+type Image = (Ptr MyImage)
+-- #if __GLASGOW_HASKELL__
+--         deriving (Eq, Ord, Show, Typeable)
+-- #else
+--         deriving (Eq, Ord, Show)
+-- #endif
 
 type Pixel         = #{type unsigned long}
 type Position      = #{type int}
